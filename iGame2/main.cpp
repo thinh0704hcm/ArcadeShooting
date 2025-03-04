@@ -80,7 +80,7 @@ void LoadResources()
     {
         float margin = 50.0f; // Define a margin to avoid spawning at the bounds
         float randomX = margin + static_cast<float>(rand() % static_cast<int>(SCREEN_WIDTH - 2 * margin));
-        float randomY = static_cast<float>(i * 30);
+        float randomY = static_cast<float>(i * 90);
         CGame::GetInstance()->AddUFO(new CUFO(randomX, randomY, -0.3, 0, texUFO, texEnemyBullet)); // Reduced speed from -10 to -1
     }
 }
@@ -98,10 +98,13 @@ void Update(DWORD dt)
 		{
 			float margin = 50.0f; // Define a margin to avoid spawning at the bounds
 			float randomX = margin + static_cast<float>(rand() % static_cast<int>(SCREEN_WIDTH - 2 * margin));
-			float randomY = static_cast<float>(i * 30);
+			float randomY = static_cast<float>(i * 90);
 			game->AddUFO(new CUFO(randomX, randomY, -0.3, 0, texUFO, texEnemyBullet));
 		}
 	}
+
+	//Showing health in titlebar
+	DebugOutTitle(L"Health : %i", game->GetShip()->GetHealth());
 }
 
 void Render()
@@ -220,7 +223,6 @@ int Run()
 		else
 			Sleep((DWORD)(tickPerFrame - dt));
 	}
-
 	return 1;
 }
 

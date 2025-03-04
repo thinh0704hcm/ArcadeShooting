@@ -49,6 +49,7 @@ class CShip : public CGameObject
 {
     float vx;
     float vy;
+    int health = 3;
     LPTEXTURE teamBulletTexture;
 
 public:
@@ -62,11 +63,12 @@ public:
     void SpawnBullet();
     void Update(DWORD dt);
     void Render();
-    bool isDestroyed = false;
+	int GetHealth() { return health; };
+    bool isDestroyed() { return health == 0; };
     bool CollisionCheck(float x, float y) {
         if (std::abs(x - this->GetX()) < 48 && std::abs(y - this->GetY()) < 90)
         {
-            isDestroyed = true;
+            health--;
             return true;
         }
         return false;

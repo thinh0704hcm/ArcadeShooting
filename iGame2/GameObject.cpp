@@ -30,7 +30,7 @@ CGameObject::~CGameObject()
 
 void CShip::Update(DWORD dt)
 {
-    if (isDestroyed) return;
+    if (isDestroyed()) return;
     static bool spacePressed = false;
     static DWORD lastFireTime = 0;
     DWORD currentTime = (DWORD)GetTickCount64();
@@ -122,7 +122,7 @@ void CBullet::Update(DWORD dt)
     }
     CShip* check = CGame::GetInstance()->GetShip();
 
-    if (check != NULL && !check->isDestroyed && check->CollisionCheck(x, y))
+    if (check != NULL && !check->isDestroyed() && check->CollisionCheck(x, y))
     {
         isDestroyed = true;
         return;
@@ -143,7 +143,7 @@ void CBullet::Update(DWORD dt)
 
 void CShip::Render()
 {
-	if (isDestroyed) return;
+	if (isDestroyed()) return;
 	CGameObject::Render();
 }
 
