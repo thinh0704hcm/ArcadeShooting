@@ -30,8 +30,10 @@ CGameObject::~CGameObject()
 
 void CShip::Update(DWORD dt)
 {
-	if (isDestroyed) return;
+    if (isDestroyed) return;
     static bool spacePressed = false;
+    static DWORD lastFireTime = 0;
+    DWORD currentTime = (DWORD)GetTickCount64();
 
     // Process WASD input for movement
     if (GetAsyncKeyState(0x57)) y -= vy * dt; // W key
@@ -42,10 +44,11 @@ void CShip::Update(DWORD dt)
     // Process space key for bullet spawn
     if (GetAsyncKeyState(VK_SPACE))
     {
-        if (!spacePressed)
+        if (!spacePressed || (currentTime - lastFireTime > 200)) // Fire every 200ms
         {
             SpawnBullet();
             spacePressed = true;
+            lastFireTime = currentTime;
         }
     }
     else
@@ -73,7 +76,7 @@ void CUFO::Update(DWORD dt)
    x += vx * dt;  
 
    // Fire bullet at intervals  
-   if (currentTime - lastFireTime > 650) // Fire every 2 seconds  
+   if (currentTime - lastFireTime > 350) // Fire every 2 seconds  
    {  
        SpawnBullet();  
        lastFireTime = currentTime;  
@@ -112,10 +115,17 @@ void CBullet::Update(DWORD dt)
 {
 	if (isDestroyed) return;
 	y += vy * dt;
+    if (y < 0 || y > CGame::GetInstance()->GetBackBufferHeight())
+    {
+        isDestroyed = true;
+        return;
+    }
     CShip* check = CGame::GetInstance()->GetShip();
+
     if (check != NULL && !check->isDestroyed && check->CollisionCheck(x, y))
     {
         isDestroyed = true;
+        return;
         //Stop game
 
     }
@@ -125,6 +135,7 @@ void CBullet::Update(DWORD dt)
 		if (check != NULL && !check->isDestroyed && check->CollisionCheck(x, y))
 		{
 			isDestroyed = true;
+            return;
 		}
 	}
 

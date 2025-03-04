@@ -26,7 +26,7 @@ class CGame
 
 	ID3DX10Sprite* spriteObject = NULL;				// Sprite handling object 
 
-	CBullet* bullets[100];						// Array of bullets
+	CBullet* bullets[1000];						// Array of bullets
 	CUFO* ufos[8];						// Array of UFO
 	CShip* Ship;				// The player ship
 

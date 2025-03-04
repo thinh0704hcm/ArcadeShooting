@@ -254,7 +254,7 @@ LPTEXTURE CGame::LoadTexture(LPCWSTR texturePath)
 
 void CGame::AddBullet(CBullet* bullet)
 {
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 1000; i++)
 	{
 		if (bullets[i] == nullptr || bullets[i]->isDestroyed)
 		{
@@ -286,7 +286,7 @@ void CGame::AddUFO(CUFO* ufo)
 
 void CGame::Update(DWORD dt)
 {
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 1000; i++)
 	{
 		if (bullets[i] != NULL && !bullets[i]->isDestroyed)
 		{

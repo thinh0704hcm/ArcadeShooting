@@ -39,7 +39,7 @@
 using namespace std;
 
 #define SHIP_START_X 100.0f
-#define SHIP_START_Y 100.0f
+#define SHIP_START_Y 900.0f
 #define SHIP_START_VX 0.23f
 #define SHIP_START_VY 0.23f
 
