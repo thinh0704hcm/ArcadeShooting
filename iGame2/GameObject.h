@@ -64,7 +64,7 @@ public:
     void Render();
     bool isDestroyed = false;
     bool CollisionCheck(float x, float y) {
-        if (std::abs(x - this->GetX()) < 10 && std::abs(y - this->GetY()) < 10)
+        if (std::abs(x - this->GetX()) < 48 && std::abs(y - this->GetY()) < 90)
         {
             isDestroyed = true;
             return true;
@@ -92,7 +92,7 @@ public:
     void Render();
     bool isDestroyed = false;
     bool CollisionCheck(float x, float y) {
-        if (std::abs(x - this->GetX()) < 10 && std::abs(y - this->GetY()) < 10)
+        if (std::abs(x - this->GetX()) < 80 && std::abs(y - this->GetY()) < 60)
         {
             isDestroyed = true;
             return true;

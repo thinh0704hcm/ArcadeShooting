@@ -293,7 +293,7 @@ void CGame::Update(DWORD dt)
 			bullets[i]->Update(dt);
 		}
 	}
-	for (int i = 0; i < 50; i++)
+	for (int i = 0; i < 8; i++)
 	{
 		if (ufos[i] != NULL && !ufos[i]->isDestroyed)
 		{

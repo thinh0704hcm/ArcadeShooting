@@ -73,7 +73,7 @@ void CUFO::Update(DWORD dt)
    x += vx * dt;  
 
    // Fire bullet at intervals  
-   if (currentTime - lastFireTime > 1000) // Fire every 2 seconds  
+   if (currentTime - lastFireTime > 650) // Fire every 2 seconds  
    {  
        SpawnBullet();  
        lastFireTime = currentTime;  
@@ -97,14 +97,14 @@ void CUFO::Update(DWORD dt)
 void CShip::SpawnBullet()
 {
     float bulletSpeed = 0.5f;
-    CBullet* bullet = new CBullet(x, y-150, 0, -bulletSpeed, teamBulletTexture);
+    CBullet* bullet = new CBullet(x, y-92, 0, -bulletSpeed, teamBulletTexture);
     CGame::GetInstance()->AddBullet(bullet);
 }
 
 void CUFO::SpawnBullet()
 {
     float bulletSpeed = 0.3f;
-    CBullet* bullet = new CBullet(x, y+150, 0, bulletSpeed, enemyBulletTexture);
+    CBullet* bullet = new CBullet(x, y+60, 0, bulletSpeed, enemyBulletTexture);
     CGame::GetInstance()->AddBullet(bullet);
 }
 
@@ -119,7 +119,7 @@ void CBullet::Update(DWORD dt)
         //Stop game
 
     }
-	for (int i = 0; i < 50; i++)
+	for (int i = 0; i < 8; i++)
 	{
         CUFO* check = CGame::GetInstance()->GetUFO(i);
 		if (check != NULL && !check->isDestroyed && check->CollisionCheck(x, y))

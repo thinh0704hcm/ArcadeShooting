@@ -38,10 +38,10 @@
 
 using namespace std;
 
-#define SHIP_START_X 10.0f
+#define SHIP_START_X 100.0f
 #define SHIP_START_Y 100.0f
-#define SHIP_START_VX 0.1f
-#define SHIP_START_VY 0.1f
+#define SHIP_START_VX 0.23f
+#define SHIP_START_VY 0.23f
 
 LPTEXTURE texShip = NULL;
 LPTEXTURE texUFO = NULL;
@@ -81,7 +81,7 @@ void LoadResources()
         float margin = 50.0f; // Define a margin to avoid spawning at the bounds
         float randomX = margin + static_cast<float>(rand() % static_cast<int>(SCREEN_WIDTH - 2 * margin));
         float randomY = static_cast<float>(i * 30);
-        CGame::GetInstance()->AddUFO(new CUFO(randomX, randomY, -1, 0, texUFO, texEnemyBullet)); // Reduced speed from -10 to -1
+        CGame::GetInstance()->AddUFO(new CUFO(randomX, randomY, -0.3, 0, texUFO, texEnemyBullet)); // Reduced speed from -10 to -1
     }
 }
 
@@ -89,6 +89,19 @@ void Update(DWORD dt)
 {
 	CGame* game = CGame::GetInstance();
 	game->Update(dt);
+
+	//Spawning UFOs
+	for (int i = 0; i < 8; i++)
+	{
+		CUFO* ufo = game->GetUFO(i);
+		if (ufo != nullptr && ufo->isDestroyed)
+		{
+			float margin = 50.0f; // Define a margin to avoid spawning at the bounds
+			float randomX = margin + static_cast<float>(rand() % static_cast<int>(SCREEN_WIDTH - 2 * margin));
+			float randomY = static_cast<float>(i * 30);
+			game->AddUFO(new CUFO(randomX, randomY, -0.3, 0, texUFO, texEnemyBullet));
+		}
+	}
 }
 
 void Render()
@@ -111,7 +124,7 @@ void Render()
 		
 		g->GetShip()->Render();
 
-		for (int i = 0; i < 50; i++)
+		for (int i = 0; i < 8; i++)
 		{
 			CUFO* ufo = g->GetUFO(i);
 			if (ufo != nullptr) ufo->Render();
