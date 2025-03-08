@@ -186,7 +186,7 @@ void Update(DWORD dt)
 	for (int i = 0; i < 7; i++)
 	{
 		CEnemy* Enemy = game->GetEnemy(i);
-		if (Enemy != nullptr) DebugOut(L"Enemy %i X : %i, Y : %i\n", i, Enemy->GetX(), Enemy->GetY());
+		if (Enemy != nullptr) DebugOut(L"Enemy %i X : %f, Y : %f\n", i, Enemy->GetX(), Enemy->GetY());
 	}
 
 }

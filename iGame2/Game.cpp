@@ -259,25 +259,22 @@ void CGame::AddBullet(CBullet* bullet, int index)
 		bullets[index] = bullet;
 		return;
 	}
-	bullets[0] = bullet;
 }
 
-void CGame::AddTank(CTank* Tank)
+void CGame::AddTank(CTank* tank)
 {
-	Tank = Tank;
+	Tank = tank;
 }
 
 void CGame::AddEnemy(CEnemy* Enemy)
 {
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 7; i++)
 	{
 		if (enemy[i] == nullptr || enemy[i]->isDestroyed())
 		{
 			enemy[i] = Enemy;
 			return;
 		}
-		enemy[0] = Enemy;
-	
 	}
 }
 
