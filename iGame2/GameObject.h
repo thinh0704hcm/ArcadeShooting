@@ -77,7 +77,7 @@ public:
 	int GetHealth() { return health; };
 	bool isDestroyed() { return health == 0; };
 	bool CollisionCheck(float x, float y) {
-		if (std::abs(x - this->GetX()) < 7 && std::abs(y - this->GetY()) < 7)
+		if (std::fabs(x - this->GetX()) < 7 && std::fabs(y - this->GetY()) < 7)
 		{
 			health--;
 			return true;
@@ -156,5 +156,6 @@ public:
 		}
 	};
 	void SpawnBullet();
+	void Render();
 	void Update(DWORD dt);
 };

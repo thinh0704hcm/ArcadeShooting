@@ -268,6 +268,32 @@ void CTank::Render()
 		CGameObject::Render(rightTexture);
 }
 
+void CEnemy::Render()
+{
+    switch (health)
+    {
+    case 3:
+        upTexture = redUpTexture;
+        downTexture = redDownTexture;
+        leftTexture = redLeftTexture;
+        rightTexture = redRightTexture;
+        break;
+    case 2:
+        upTexture = greenUpTexture;
+        downTexture = greenDownTexture;
+        leftTexture = greenLeftTexture;
+        rightTexture = greenRightTexture;
+        break;
+    default:
+        upTexture = whiteUpTexture;
+        downTexture = whiteDownTexture;
+        leftTexture = whiteLeftTexture;
+        rightTexture = whiteRightTexture;
+        break;
+    }
+    CTank::Render();
+}
+
 void CBullet::Render()
 {
     if (isDestroyed) return;
