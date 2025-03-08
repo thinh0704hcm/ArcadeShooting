@@ -129,10 +129,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Image Include="brick.ico" />
-    <Image Include="enemy_bullet.png" />
-    <Image Include="team_bullet.png" />
-    <Image Include="ship.png" />
-    <Image Include="ufo.png" />
+    <Image Include="bullet_down.png" />
+    <Image Include="bullet_left.png" />
+    <Image Include="bullet_right.png" />
+    <Image Include="bullet_up.png" />
+    <Image Include="green_tank_down.png" />
+    <Image Include="green_tank_left.png" />
+    <Image Include="green_tank_right.png" />
+    <Image Include="green_tank_up.png" />
+    <Image Include="red_tank_down.png" />
+    <Image Include="red_tank_left.png" />
+    <Image Include="red_tank_right.png" />
+    <Image Include="red_tank_up.png" />
+    <Image Include="white_tank_down.png" />
+    <Image Include="white_tank_left.png" />
+    <Image Include="white_tank_right.png" />
+    <Image Include="white_tank_up.png" />
+    <Image Include="yellow_tank_down.png" />
+    <Image Include="yellow_tank_left.png" />
+    <Image Include="yellow_tank_right.png" />
+    <Image Include="yellow_tank_up.png" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug.cpp" />

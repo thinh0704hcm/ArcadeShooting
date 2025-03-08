@@ -26,9 +26,9 @@ class CGame
 
 	ID3DX10Sprite* spriteObject = NULL;				// Sprite handling object 
 
-	CBullet* bullets[1000];						// Array of bullets
-	CUFO* ufos[8];						// Array of UFO
-	CShip* Ship;				// The player ship
+	CBullet* bullets[8];						// Array of bullets
+	CEnemy* enemy[7];						// Array of Enemy
+	CTank* Tank;				// The player Tank
 
 
 public:
@@ -63,12 +63,21 @@ public:
 	int GetBackBufferHeight() { return backBufferHeight; }
 
 	static CGame * GetInstance();
-	void AddBullet(CBullet* obj);
-	void AddUFO(CUFO* obj);
-	void AddShip(CShip* ship);
+	void AddBullet(CBullet* obj, int index);
+	void AddEnemy(CEnemy* obj);
+	void AddTank(CTank* Tank);
 	void Update(DWORD dt);
-	CShip* GetShip() { return Ship; }
-    CUFO* GetUFO(int index) { return ufos[index]; }
+	CTank* GetTank() { return Tank; }
+    CEnemy* GetEnemy(int index) { return enemy[index]; }
+	int GetEnemyIndex(CEnemy* enemy)
+	{
+		for (int i = 0; i < 7; i++)
+		{
+			if (this->enemy[i] == enemy)
+				return i;
+		}
+		return -1;
+	}
 	CBullet* GetBullet(int index) { return bullets[index]; }
 
 

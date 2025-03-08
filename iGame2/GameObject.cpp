@@ -7,28 +7,34 @@
 /*
 	Initialize game object 
 */
-CGameObject::CGameObject(float x, float y, LPTEXTURE tex)
+CGameObject::CGameObject(float x, float y, LPTEXTURE uptex, LPTEXTURE downtex, LPTEXTURE lefttex, LPTEXTURE righttex)
 {
 	this->x = x;
 	this->y = y;
-	this->texture = tex;
+	this->upTexture = uptex;
+    this->upTexture = downtex;
+    this->upTexture = lefttex;
+    this->upTexture = righttex;
 }
 
-void CGameObject::Render()
+void CGameObject::Render(LPTEXTURE texture)
 {
 	CGame::GetInstance()->Draw(x, y, texture);
 }
 
 CGameObject::~CGameObject()
 {
-	if (texture != NULL) delete texture;
+	if (upTexture != NULL) delete upTexture;
+    if (downTexture != NULL) delete downTexture;
+    if (leftTexture != NULL) delete leftTexture;
+    if (rightTexture != NULL) delete rightTexture;
 }
 
-#define SHIP_VX 0.1f
-#define SHIP_WIDTH 14
-#define UFO_WIDTH 20
+#define Tank_VX 0.1f
+#define Tank_WIDTH 14
+#define Enemy_WIDTH 40
 
-void CShip::Update(DWORD dt)
+void CTank::Update(DWORD dt)
 {
     if (isDestroyed()) return;
     static bool spacePressed = false;
@@ -56,33 +62,33 @@ void CShip::Update(DWORD dt)
         spacePressed = false;
     }
 
-    // Ensure the ship stays within the screen bounds
+    // Ensure the Tank stays within the screen bounds
     int BackBufferWidth = CGame::GetInstance()->GetBackBufferWidth();
     int BackBufferHeight = CGame::GetInstance()->GetBackBufferHeight();
 
     if (x < 0) x = 0;
-    if (x > BackBufferWidth - SHIP_WIDTH) x = (float)(BackBufferWidth - SHIP_WIDTH);
+    if (x > BackBufferWidth - Tank_WIDTH) x = (float)(BackBufferWidth - Tank_WIDTH);
     if (y < 0) y = 0;
-    if (y > BackBufferHeight - SHIP_WIDTH) y = (float)(BackBufferHeight - SHIP_WIDTH);
+    if (y > BackBufferHeight - Tank_WIDTH) y = (float)(BackBufferHeight - Tank_WIDTH);
 }
 
-void CUFO::Update(DWORD dt)  
+void CEnemy::Update(DWORD dt)  
 {  
-   if (isDestroyed) return;  
+   if (isDestroyed()) return;  
 
    DWORD currentTime = (DWORD)GetTickCount64();  // Cast to DWORD to avoid C4244 warning
 
-   // Move UFO horizontally  
+   // Move Enemy horizontally  
    x += vx * dt;  
 
    // Fire bullet at intervals  
-   if (currentTime - lastFireTime > 350) // Fire every 2 seconds  
+   if (currentTime - lastFireTime > 2000) // Fire every 2 seconds  
    {  
        SpawnBullet();  
        lastFireTime = currentTime;  
    }  
 
-   // Ensure the UFO stays within the screen bounds and bounce back  
+   // Ensure the Enemy stays within the screen bounds and bounce back  
    int BackBufferWidth = CGame::GetInstance()->GetBackBufferWidth();  
 
    if (x < 0)  
@@ -90,25 +96,43 @@ void CUFO::Update(DWORD dt)
        x = 0;  
        vx = -vx;  
    }  
-   if (x > BackBufferWidth - UFO_WIDTH)  
+   if (x > BackBufferWidth - Enemy_WIDTH)  
    {  
-       x = (float)(BackBufferWidth - UFO_WIDTH);  
+       x = (float)(BackBufferWidth - Enemy_WIDTH);  
        vx = -vx;  
    }  
 }
 
-void CShip::SpawnBullet()
-{
-    float bulletSpeed = 0.5f;
-    CBullet* bullet = new CBullet(x, y-92, 0, -bulletSpeed, teamBulletTexture);
-    CGame::GetInstance()->AddBullet(bullet);
+void CTank::SpawnBullet()  
+{  
+   float bulletSpeed = 0.5f;  
+   float bulletVx = 0, bulletVy = 0;  
+   if (vx != 0)  
+   {  
+       bulletVx = vx / abs(vx) * bulletSpeed;  
+   }  
+   else if (vy != 0)  
+   {  
+       bulletVy = vy / abs(vy) * bulletSpeed;  
+   }  
+   CBullet* bullet = new CBullet(x, y, bulletVx, bulletVy, bulletUpTexture, bulletDownTexture, bulletLeftTexture, bulletRightTexture);  
+   CGame::GetInstance()->AddBullet(bullet,0);  
 }
 
-void CUFO::SpawnBullet()
+void CEnemy::SpawnBullet()
 {
-    float bulletSpeed = 0.3f;
-    CBullet* bullet = new CBullet(x, y+60, 0, bulletSpeed, enemyBulletTexture);
-    CGame::GetInstance()->AddBullet(bullet);
+    float bulletSpeed = 0.5f;
+    float bulletVx = 0, bulletVy = 0;
+    if (vx != 0)
+    {
+        bulletVx = vx / abs(vx) * bulletSpeed;
+    }
+    else if (vy != 0)
+    {
+        bulletVy = vy / abs(vy) * bulletSpeed;
+    }
+    CBullet* bullet = new CBullet(x, y, bulletVx, bulletVy, bulletUpTexture, bulletDownTexture, bulletLeftTexture, bulletRightTexture);
+    CGame::GetInstance()->AddBullet(bullet, CGame::GetInstance()->GetEnemyIndex(this));
 }
 
 void CBullet::Update(DWORD dt)
@@ -120,7 +144,7 @@ void CBullet::Update(DWORD dt)
         isDestroyed = true;
         return;
     }
-    CShip* check = CGame::GetInstance()->GetShip();
+    CTank* check = CGame::GetInstance()->GetTank();
 
     if (check != NULL && !check->isDestroyed() && check->CollisionCheck(x, y))
     {
@@ -131,8 +155,8 @@ void CBullet::Update(DWORD dt)
     }
 	for (int i = 0; i < 8; i++)
 	{
-        CUFO* check = CGame::GetInstance()->GetUFO(i);
-		if (check != NULL && !check->isDestroyed && check->CollisionCheck(x, y))
+        CEnemy* check = CGame::GetInstance()->GetEnemy(i);
+		if (check != NULL && !check->isDestroyed() && check->CollisionCheck(x, y))
 		{
 			isDestroyed = true;
             return;
@@ -141,20 +165,30 @@ void CBullet::Update(DWORD dt)
 
 }
 
-void CShip::Render()
+void CTank::Render()
 {
 	if (isDestroyed()) return;
-	CGameObject::Render();
-}
-
-void CUFO::Render()
-{
-    if (isDestroyed) return;
-    CGameObject::Render();
+    if (vx == 0)
+		if (vy > 0)
+			CGameObject::Render(downTexture);
+		else
+			CGameObject::Render(upTexture);
+	else if (vx < 0)
+		CGameObject::Render(leftTexture);
+	else
+		CGameObject::Render(rightTexture);
 }
 
 void CBullet::Render()
 {
     if (isDestroyed) return;
-    CGameObject::Render();
+    if (vx == 0)
+        if (vy > 0)
+            CGameObject::Render(downTexture);
+        else
+            CGameObject::Render(upTexture);
+    else if (vx < 0)
+        CGameObject::Render(leftTexture);
+    else
+        CGameObject::Render(rightTexture);
 }

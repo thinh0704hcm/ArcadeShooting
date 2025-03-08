@@ -46,16 +46,64 @@
     <Image Include="brick.ico">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="ship.png">
+    <Image Include="bullet_left.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="ufo.png">
+    <Image Include="bullet_right.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="team_bullet.png">
+    <Image Include="bullet_down.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="enemy_bullet.png">
+    <Image Include="bullet_up.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="white_tank_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="white_tank_down.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="white_tank_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="white_tank_up.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="red_tank_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="red_tank_down.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="red_tank_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="red_tank_up.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="yellow_tank_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="yellow_tank_down.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="yellow_tank_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="yellow_tank_up.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="green_tank_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="green_tank_down.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="green_tank_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="green_tank_up.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

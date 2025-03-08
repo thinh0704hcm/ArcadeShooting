@@ -1,16 +1,16 @@
 /* =============================================================
 	INTRODUCTION TO GAME PROGRAMMING SE102
-	
-	SAMPLE 01 - SKELETON CODE 
+
+	SAMPLE 01 - SKELETON CODE
 
 	This sample illustrates how to:
 
 	1/ Re-organize introductory code to an initial skeleton for better scalability
 	2/ CGame is a singleton, playing a role of an "engine".
 	3/ CGameObject is an abstract class for all game objects
-	4/ CTexture is a wrapper class for ID3D10TEXTURE 
-	
-	NOTE: to create transparent background, download GIMP, then use Color to Alpha feature 
+	4/ CTexture is a wrapper class for ID3D10TEXTURE
+
+	NOTE: to create transparent background, download GIMP, then use Color to Alpha feature
 ================================================================ */
 
 #include <windows.h>
@@ -26,29 +26,66 @@
 #define MAIN_WINDOW_TITLE L"01 - Skeleton"
 #define WINDOW_ICON_PATH L"brick.ico"
 
-#define TEXTURE_PATH_SHIP L"ship.png"
-#define TEXTURE_PATH_UFO L"ufo.png"
-#define TEXTURE_PATH_TEAM_BULLET L"team_bullet.png"
-#define TEXTURE_PATH_ENEMY_BULLET L"enemy_bullet.png"
+#define TEXTURE_PATH_TANK_UP L"yellow_tank_up.png"
+#define TEXTURE_PATH_TANK_DOWN L"yellow_tank_down.png"
+#define TEXTURE_PATH_TANK_LEFT L"yellow_tank_left.png"
+#define TEXTURE_PATH_TANK_RIGHT L"yellow_tank_right.png"
+
+#define TEXTURE_PATH_RED_UP L"red_tank_up.png"
+#define TEXTURE_PATH_RED_DOWN L"red_tank_down.png"
+#define TEXTURE_PATH_RED_LEFT L"red_tank_left.png"
+#define TEXTURE_PATH_RED_RIGHT L"red_tank_right.png"
+
+#define TEXTURE_PATH_GREEN_UP L"green_tank_up.png"
+#define TEXTURE_PATH_GREEN_DOWN L"green_tank_down.png"
+#define TEXTURE_PATH_GREEN_LEFT L"green_tank_left.png"
+#define TEXTURE_PATH_GREEN_RIGHT L"green_tank_right.png"
+
+#define TEXTURE_PATH_WHITE_UP L"white_tank_up.png"
+#define TEXTURE_PATH_WHITE_DOWN L"white_tank_down.png"
+#define TEXTURE_PATH_WHITE_LEFT L"white_tank_left.png"
+#define TEXTURE_PATH_WHITE_RIGHT L"white_tank_right.png"
+
+#define TEXTURE_PATH_BULLET_UP L"bullet_up.png"
+#define TEXTURE_PATH_BULLET_DOWN L"bullet_down.png"
+#define TEXTURE_PATH_BULLET_LEFT L"bullet_left.png"
+#define TEXTURE_PATH_BULLET_RIGHT L"bullet_right.png"
 
 
-#define BACKGROUND_COLOR D3DXCOLOR(0.5f, 0.5f, 0.5f, 0.0f)
-#define SCREEN_WIDTH 1920
-#define SCREEN_HEIGHT 1080
+#define BACKGROUND_COLOR D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f)
+#define SCREEN_WIDTH 320
+#define SCREEN_HEIGHT 320
 
 using namespace std;
 
-#define SHIP_START_X 100.0f
-#define SHIP_START_Y 900.0f
-#define SHIP_START_VX 0.23f
-#define SHIP_START_VY 0.23f
+#define Tank_START_X 300.0f
+#define Tank_START_Y 300.0f
+#define	TANK_VELOCITY 0.1f
 
-LPTEXTURE texShip = NULL;
-LPTEXTURE texUFO = NULL;
-LPTEXTURE texTeamBullet = NULL;
-LPTEXTURE texEnemyBullet = NULL;
+LPTEXTURE texTankUp = NULL;
+LPTEXTURE texTankDown = NULL;
+LPTEXTURE texTankLeft = NULL;
+LPTEXTURE texTankRight = NULL;
 
-vector<CGameObject*> objects;
+LPTEXTURE texRedUp = NULL;
+LPTEXTURE texRedDown = NULL;
+LPTEXTURE texRedLeft = NULL;
+LPTEXTURE texRedRight = NULL;
+
+LPTEXTURE texGreenUp = NULL;
+LPTEXTURE texGreenDown = NULL;
+LPTEXTURE texGreenLeft = NULL;
+LPTEXTURE texGreenRight = NULL;
+
+LPTEXTURE texWhiteUp = NULL;
+LPTEXTURE texWhiteDown = NULL;
+LPTEXTURE texWhiteLeft = NULL;
+LPTEXTURE texWhiteRight = NULL;
+
+LPTEXTURE texBulletUp = NULL;
+LPTEXTURE texBulletDown = NULL;
+LPTEXTURE texBulletLeft = NULL;
+LPTEXTURE texBulletRight = NULL;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -66,23 +103,76 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void LoadResources()
 {
-	CGame * game = CGame::GetInstance();
-	texShip = game->LoadTexture(TEXTURE_PATH_SHIP);
-	texUFO= game->LoadTexture(TEXTURE_PATH_UFO);
-	texTeamBullet = game->LoadTexture(TEXTURE_PATH_TEAM_BULLET);
-	texEnemyBullet = game->LoadTexture(TEXTURE_PATH_ENEMY_BULLET);
+	CGame* game = CGame::GetInstance();
+	texTankUp = game->LoadTexture(TEXTURE_PATH_TANK_UP);
+	texTankDown = game->LoadTexture(TEXTURE_PATH_TANK_DOWN);
+	texTankLeft = game->LoadTexture(TEXTURE_PATH_TANK_LEFT);
+	texTankRight = game->LoadTexture(TEXTURE_PATH_TANK_RIGHT);
 
-	CGame::GetInstance() -> AddShip( new CShip(SHIP_START_X, SHIP_START_Y, SHIP_START_VX, SHIP_START_VY, texShip, texTeamBullet));
+	texRedUp = game->LoadTexture(TEXTURE_PATH_RED_UP);
+	texRedDown = game->LoadTexture(TEXTURE_PATH_RED_DOWN);
+	texRedLeft = game->LoadTexture(TEXTURE_PATH_RED_LEFT);
+	texRedRight = game->LoadTexture(TEXTURE_PATH_RED_RIGHT);
 
-    srand(time(NULL));
+	texGreenUp = game->LoadTexture(TEXTURE_PATH_GREEN_UP);
+	texGreenDown = game->LoadTexture(TEXTURE_PATH_GREEN_DOWN);
+	texGreenLeft = game->LoadTexture(TEXTURE_PATH_GREEN_LEFT);
+	texGreenRight = game->LoadTexture(TEXTURE_PATH_GREEN_RIGHT);
 
-    for (int i = 0; i < 3; i++)
-    {
-        float margin = 50.0f; // Define a margin to avoid spawning at the bounds
-        float randomX = margin + static_cast<float>(rand() % static_cast<int>(SCREEN_WIDTH - 2 * margin));
-        float randomY = static_cast<float>(i * 90);
-        CGame::GetInstance()->AddUFO(new CUFO(randomX, randomY, -0.3, 0, texUFO, texEnemyBullet)); // Reduced speed from -10 to -1
-    }
+	texWhiteUp = game->LoadTexture(TEXTURE_PATH_WHITE_UP);
+	texWhiteDown = game->LoadTexture(TEXTURE_PATH_WHITE_DOWN);
+	texWhiteLeft = game->LoadTexture(TEXTURE_PATH_WHITE_LEFT);
+	texWhiteRight = game->LoadTexture(TEXTURE_PATH_WHITE_RIGHT);
+
+	texBulletUp = game->LoadTexture(TEXTURE_PATH_BULLET_UP);
+	texBulletDown = game->LoadTexture(TEXTURE_PATH_BULLET_DOWN);
+	texBulletLeft = game->LoadTexture(TEXTURE_PATH_BULLET_LEFT);
+	texBulletRight = game->LoadTexture(TEXTURE_PATH_BULLET_RIGHT);
+
+	CGame::GetInstance()->AddTank(new CTank(Tank_START_X, Tank_START_Y, 0, 0,
+		texTankUp, texTankDown, texTankLeft, texTankRight,
+		texBulletUp, texBulletDown, texBulletLeft, texBulletRight));
+
+	srand(time(NULL));
+
+	for (int i = 0; i < 8; i++)
+	{
+		float margin = 1.0f; // Define a margin to avoid spawning at the bounds
+		float randomX = margin + static_cast<float>(rand() % static_cast<int>(SCREEN_WIDTH - 2 * margin));
+		float randomY = static_cast<float>(i * 90);
+		float randomVX, randomVY;
+		int direction = rand() % 4;
+
+		switch (direction)
+		{
+		case 0: // Right
+			randomVX = TANK_VELOCITY;
+			randomVY = 0.0f;
+			break;
+		case 1: // Left
+			randomVX = -TANK_VELOCITY;
+			randomVY = 0.0f;
+			break;
+		case 2: // Up
+			randomVX = 0.0f;
+			randomVY = -TANK_VELOCITY;  // For screen coordinates, negative Y is upward.
+			break;
+		case 3: // Down
+			randomVX = 0.0f;
+			randomVY = TANK_VELOCITY;
+			break;
+		default:
+			// Fallback (should never occur)
+			randomVX = 0.0f;
+			randomVY = 0.0f;
+			break;
+		}
+		CGame::GetInstance()->AddEnemy(new CEnemy(randomX, randomY, randomVX, randomVY, rand() % 3 + 1,
+			texRedUp, texRedDown, texRedLeft, texRedRight,
+			texGreenUp, texGreenDown, texGreenLeft, texGreenRight,
+			texWhiteUp, texWhiteDown, texWhiteLeft, texWhiteRight,
+			texBulletUp, texBulletDown, texBulletLeft, texBulletRight));
+	}
 }
 
 void Update(DWORD dt)
@@ -90,21 +180,15 @@ void Update(DWORD dt)
 	CGame* game = CGame::GetInstance();
 	game->Update(dt);
 
-	//Spawning UFOs
-	for (int i = 0; i < 8; i++)
+	//Showing health in titlebar
+	DebugOutTitle(L"Health : %i", game->GetTank()->GetHealth());
+	DebugOut(L"Tank X : %i, Y : %i\n", game->GetTank()->GetX(), game->GetTank()->GetY());
+	for (int i = 0; i < 7; i++)
 	{
-		CUFO* ufo = game->GetUFO(i);
-		if (ufo != nullptr && ufo->isDestroyed)
-		{
-			float margin = 50.0f; // Define a margin to avoid spawning at the bounds
-			float randomX = margin + static_cast<float>(rand() % static_cast<int>(SCREEN_WIDTH - 2 * margin));
-			float randomY = static_cast<float>(i * 90);
-			game->AddUFO(new CUFO(randomX, randomY, -0.3, 0, texUFO, texEnemyBullet));
-		}
+		CEnemy* Enemy = game->GetEnemy(i);
+		if (Enemy != nullptr) DebugOut(L"Enemy %i X : %i, Y : %i\n", i, Enemy->GetX(), Enemy->GetY());
 	}
 
-	//Showing health in titlebar
-	DebugOutTitle(L"Health : %i", game->GetShip()->GetHealth());
 }
 
 void Render()
@@ -124,16 +208,16 @@ void Render()
 
 		FLOAT NewBlendFactor[4] = { 0,0,0,0 };
 		pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
-		
-		g->GetShip()->Render();
 
-		for (int i = 0; i < 8; i++)
+		g->GetTank()->Render();
+
+		for (int i = 0; i < 7; i++)
 		{
-			CUFO* ufo = g->GetUFO(i);
-			if (ufo != nullptr) ufo->Render();
+			CEnemy* Enemy = g->GetEnemy(i);
+			if (Enemy != nullptr) Enemy->Render();
 		}
 
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 8; i++)
 		{
 			CBullet* bullet = g->GetBullet(i);
 			if (bullet != nullptr) bullet->Render();
@@ -178,7 +262,7 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 			hInstance,
 			NULL);
 
-	if (!hWnd) 
+	if (!hWnd)
 	{
 		DWORD ErrCode = GetLastError();
 		DebugOut(L"[ERROR] CreateWindow failed! ErrCode: %d\nAt: %s %d \n", ErrCode, _W(__FILE__), __LINE__);
@@ -231,11 +315,11 @@ int WINAPI WinMain(
 	_In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPSTR lpCmdLine,
 	_In_ int nCmdShow
-) 
+)
 {
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	CGame * game = CGame::GetInstance();
+	CGame* game = CGame::GetInstance();
 	game->Init(hWnd);
 
 	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);

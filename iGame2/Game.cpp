@@ -252,55 +252,52 @@ LPTEXTURE CGame::LoadTexture(LPCWSTR texturePath)
 	return new CTexture(tex, gSpriteTextureRV);
 }
 
-void CGame::AddBullet(CBullet* bullet)
+void CGame::AddBullet(CBullet* bullet, int index)
 {
-	for (int i = 0; i < 1000; i++)
+	if (bullets[index] == nullptr || bullets[index]->isDestroyed)
 	{
-		if (bullets[i] == nullptr || bullets[i]->isDestroyed)
-		{
-			bullets[i] = bullet;
-			return;
-		}
-		bullets[0] = bullet;
+		bullets[index] = bullet;
+		return;
 	}
+	bullets[0] = bullet;
 }
 
-void CGame::AddShip(CShip* ship)
+void CGame::AddTank(CTank* Tank)
 {
-	Ship = ship;
+	Tank = Tank;
 }
 
-void CGame::AddUFO(CUFO* ufo)
+void CGame::AddEnemy(CEnemy* Enemy)
 {
 	for (int i = 0; i < 100; i++)
 	{
-		if (ufos[i] == nullptr || ufos[i]->isDestroyed)
+		if (enemy[i] == nullptr || enemy[i]->isDestroyed())
 		{
-			ufos[i] = ufo;
+			enemy[i] = Enemy;
 			return;
 		}
-		ufos[0] = ufo;
+		enemy[0] = Enemy;
 	
 	}
 }
 
 void CGame::Update(DWORD dt)
 {
-	for (int i = 0; i < 1000; i++)
+	for (int i = 0; i < 8; i++)
 	{
 		if (bullets[i] != NULL && !bullets[i]->isDestroyed)
 		{
 			bullets[i]->Update(dt);
 		}
 	}
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 7; i++)
 	{
-		if (ufos[i] != NULL && !ufos[i]->isDestroyed)
+		if (enemy[i] != NULL && !enemy[i]->isDestroyed())
 		{
-			ufos[i]->Update(dt);
+			enemy[i]->Update(dt);
 		}
 	}
-	Ship->Update(dt);
+	Tank->Update(dt);
 }
 
 CGame::~CGame()
