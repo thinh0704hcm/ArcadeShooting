@@ -157,26 +157,30 @@ void CEnemy::Update(DWORD dt)
 // Add this new method to implement direction changes
 void CEnemy::ChangeDirection()
 {
-	float speed = TANK_VELOCITY;
-	int orientation = rand() % 4;  // 4 directions
+	orientation = rand() % 4;  // 4 directions
 
 	switch (orientation)
 	{
 	case 0: // Up
-		vx = 0;
-		vy = speed;
+		vx = 0.0f;
+		vy = -TANK_VELOCITY;  // For screen coordinates, negative Y is upward.
 		break;
 	case 1: // Down
-		vx = 0;
-		vy = -speed;
+		vx = 0.0f;
+		vy = TANK_VELOCITY;
 		break;
 	case 2: // Left
-		vx = -speed;
-		vy = 0;
+		vx = -TANK_VELOCITY;
+		vy = 0.0f;
 		break;
 	case 3: // Right
-		vx = speed;
-		vy = 0;
+		vx = TANK_VELOCITY;
+		vy = 0.0f;
+		break;
+	default:
+		// Fallback (should never occur)
+		vx = 0.0f;
+		vy = 0.0f;
 		break;
 	}
 }
