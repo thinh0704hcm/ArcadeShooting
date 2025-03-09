@@ -36,11 +36,13 @@ class CBullet : public CGameObject
 {
 	float vx = 50;
 	float vy = 50;
+	int orientation = 0; // 0: up, 1: down, 2: left, 3: right
 public:
-	CBullet(float x, float y, float vx, float vy, LPTEXTURE uptexture, LPTEXTURE downtexture, LPTEXTURE lefttexture, LPTEXTURE righttexture) :CGameObject(x, y, uptexture, downtexture, lefttexture, righttexture)
+	CBullet(float x, float y, float vx, float vy,int orientation, LPTEXTURE uptexture, LPTEXTURE downtexture, LPTEXTURE lefttexture, LPTEXTURE righttexture) :CGameObject(x, y, uptexture, downtexture, lefttexture, righttexture)
 	{
 		this->vx = vx;
 		this->vy = vy;
+		this->orientation = orientation;
 	};
 	void Update(DWORD dt);
 	void Render();
@@ -53,6 +55,7 @@ class CTank : public CGameObject
 protected:
 	float vx;
 	float vy;
+	int orientation = 0; // 0: up, 1: down, 2: left, 3: right
 	LPTEXTURE bulletUpTexture;
 	LPTEXTURE bulletDownTexture;
 	LPTEXTURE bulletLeftTexture;
@@ -60,11 +63,12 @@ protected:
 	int health = 3;
 
 public:
-	CTank(float x, float y, float vx, float vy, LPTEXTURE upTexture, LPTEXTURE downTexture, LPTEXTURE leftTexture, LPTEXTURE rightTexture,
+	CTank(float x, float y, float vx, float vy, int orientation, LPTEXTURE upTexture, LPTEXTURE downTexture, LPTEXTURE leftTexture, LPTEXTURE rightTexture,
 		LPTEXTURE bulletUp, LPTEXTURE bulletDown, LPTEXTURE bulletLeft, LPTEXTURE bulletRight) :CGameObject(x, y, upTexture, downTexture, leftTexture, rightTexture)
 	{
 		this->vx = vx;
 		this->vy = vy;
+		this->orientation = orientation;
 		this->bulletUpTexture = bulletUp;
 		this->bulletDownTexture = bulletDown;
 		this->bulletLeftTexture = bulletLeft;
@@ -108,13 +112,14 @@ class CEnemy : public CTank
 	LPTEXTURE whiteLeftTexture;
 	LPTEXTURE whiteRightTexture;
 public:
-	CEnemy(float x, float y, float vx, float vy, int health,
+	CEnemy(float x, float y, float vx, float vy, int health, int _or,
 		LPTEXTURE redUpTexture, LPTEXTURE redDownTexture, LPTEXTURE redLeftTexture, LPTEXTURE redRightTexture,
 		LPTEXTURE greenUpTexture, LPTEXTURE greenDownTexture, LPTEXTURE greenLeftTexture, LPTEXTURE greenRightTexture,
 		LPTEXTURE whiteUpTexture, LPTEXTURE whiteDownTexture, LPTEXTURE whiteLeftTexture, LPTEXTURE whiteRightTexture,
 		LPTEXTURE bulletUp, LPTEXTURE bulletDown, LPTEXTURE bulletLeft, LPTEXTURE bulletRight)
-		:CTank(x, y, vx, vy, upTexture, downTexture, leftTexture, rightTexture, bulletUp, bulletDown, bulletLeft, bulletRight)
+		:CTank(x, y, vx, vy, _or, upTexture, downTexture, leftTexture, rightTexture, bulletUp, bulletDown, bulletLeft, bulletRight)
 	{
+		this->health = health;
 		this->redUpTexture = redUpTexture;
 		this->redDownTexture = redDownTexture;
 		this->redLeftTexture = redLeftTexture;

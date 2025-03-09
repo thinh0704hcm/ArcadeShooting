@@ -129,7 +129,7 @@ void LoadResources()
 	texBulletLeft = game->LoadTexture(TEXTURE_PATH_BULLET_LEFT);
 	texBulletRight = game->LoadTexture(TEXTURE_PATH_BULLET_RIGHT);
 
-	CGame::GetInstance()->AddTank(new CTank(Tank_START_X, Tank_START_Y, 0, 0,
+	CGame::GetInstance()->AddTank(new CTank(Tank_START_X, Tank_START_Y, 0, 0, 0,
 		texTankUp, texTankDown, texTankLeft, texTankRight,
 		texBulletUp, texBulletDown, texBulletLeft, texBulletRight));
 
@@ -167,7 +167,7 @@ void LoadResources()
 			randomVY = 0.0f;
 			break;
 		}
-		CGame::GetInstance()->AddEnemy(new CEnemy(randomX, randomY, randomVX, randomVY, rand() % 3 + 1,
+		CGame::GetInstance()->AddEnemy(new CEnemy(randomX, randomY, randomVX, randomVY, rand() % 3 + 1, rand() % 4 + 1,
 			texRedUp, texRedDown, texRedLeft, texRedRight,
 			texGreenUp, texGreenDown, texGreenLeft, texGreenRight,
 			texWhiteUp, texWhiteDown, texWhiteLeft, texWhiteRight,
