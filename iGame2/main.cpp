@@ -141,25 +141,25 @@ void LoadResources()
 		float randomX = margin + static_cast<float>(rand() % static_cast<int>(SCREEN_WIDTH - 2 * margin));
 		float randomY = static_cast<float>(i * 90);
 		float randomVX, randomVY;
-		int direction = rand() % 4;
+		int orientation = rand() % 4;
 
-		switch (direction)
+		switch (orientation)
 		{
-		case 0: // Right
-			randomVX = TANK_VELOCITY;
-			randomVY = 0.0f;
-			break;
-		case 1: // Left
-			randomVX = -TANK_VELOCITY;
-			randomVY = 0.0f;
-			break;
-		case 2: // Up
+		case 0: // Up
 			randomVX = 0.0f;
 			randomVY = -TANK_VELOCITY;  // For screen coordinates, negative Y is upward.
 			break;
-		case 3: // Down
+		case 1: // Down
 			randomVX = 0.0f;
 			randomVY = TANK_VELOCITY;
+			break;
+		case 2: // Left
+			randomVX = -TANK_VELOCITY;
+			randomVY = 0.0f;
+			break;
+		case 3: // Right
+			randomVX = TANK_VELOCITY;
+			randomVY = 0.0f;
 			break;
 		default:
 			// Fallback (should never occur)
@@ -167,7 +167,7 @@ void LoadResources()
 			randomVY = 0.0f;
 			break;
 		}
-		CGame::GetInstance()->AddEnemy(new CEnemy(randomX, randomY, randomVX, randomVY, rand() % 3 + 1, rand() % 4 + 1,
+		CGame::GetInstance()->AddEnemy(new CEnemy(randomX, randomY, randomVX, randomVY, rand() % 3 + 1, orientation,
 			texRedUp, texRedDown, texRedLeft, texRedRight,
 			texGreenUp, texGreenDown, texGreenLeft, texGreenRight,
 			texWhiteUp, texWhiteDown, texWhiteLeft, texWhiteRight,

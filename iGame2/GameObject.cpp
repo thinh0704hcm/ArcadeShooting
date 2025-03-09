@@ -125,21 +125,25 @@ void CEnemy::Update(DWORD dt)
 	{
 		x = 0;
 		vx = -vx;
+		orientation = 3; // Change orientation to right
 	}
-	if (x > BackBufferWidth - 40)  // 40 is enemy width
+	if (x > BackBufferWidth - 7)  // 7 is enemy width
 	{
-		x = (float)(BackBufferWidth - 40);
+		x = (float)(BackBufferWidth - 7);
 		vx = -vx;
+		orientation = 2; // Change orientation to left
 	}
 	if (y < 0)
 	{
 		y = 0;
 		vy = -vy;
+		orientation = 1; // Change orientation to down
 	}
-	if (y > BackBufferHeight - 40)  // 40 is enemy height
+	if (y > BackBufferHeight - 7)  // 7 is enemy height
 	{
-		y = (float)(BackBufferHeight - 40);
+		y = (float)(BackBufferHeight - 7);
 		vy = -vy;
+		orientation = 0; // Change orientation to up
 	}
 
 	// Fire bullet at intervals
@@ -154,29 +158,25 @@ void CEnemy::Update(DWORD dt)
 void CEnemy::ChangeDirection()
 {
 	float speed = TANK_VELOCITY;
-	int direction = rand() % 4;  // 4 directions
+	int orientation = rand() % 4;  // 4 directions
 
-	switch (direction)
+	switch (orientation)
 	{
-	case 0: // Right
-		vx = speed;
-		vy = 0;
-		orientation = 3;
-		break;
-	case 1: // Left
-		vx = -speed;
-		vy = 0;
-		orientation = 2;
-		break;
-	case 2: // Up
-		vx = 0;
-		vy = -speed;
-		orientation = 0;
-		break;
-	case 3: // Down
+	case 0: // Up
 		vx = 0;
 		vy = speed;
-		orientation = 1;
+		break;
+	case 1: // Down
+		vx = 0;
+		vy = -speed;
+		break;
+	case 2: // Left
+		vx = -speed;
+		vy = 0;
+		break;
+	case 3: // Right
+		vx = speed;
+		vy = 0;
 		break;
 	}
 }
@@ -257,7 +257,7 @@ void CEnemy::SpawnBullet()
 		bulletVy = -bulletSpeed;
 
 	}
-	CBullet* bullet = new CBullet(x, y, bulletVx, bulletVy, orientation, bulletUpTexture, bulletDownTexture, bulletLeftTexture, bulletRightTexture);
+	CBullet* bullet = new CBullet(bulletX, bulletY, bulletVx, bulletVy, orientation, bulletUpTexture, bulletDownTexture, bulletLeftTexture, bulletRightTexture);
 	CGame::GetInstance()->AddBullet(bullet, CGame::GetInstance()->GetEnemyIndex(this) + 1);
 }
 
